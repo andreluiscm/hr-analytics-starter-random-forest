@@ -1,0 +1,2 @@
+Dataset: HR Analytics Starter
+https://www.kaggle.com/datasets/stevenshoemaker11/hr-analytics-starter/data
