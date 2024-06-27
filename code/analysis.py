@@ -4,12 +4,26 @@ import pandas as pd
 import seaborn as sns
 
 
+# Definindo uma paleta de cores personalizada com hexadecimais
+custom_palette = ["#ff7f0e", "#1f77b4"]
+
+# Definindo a paleta como a paleta padrão
+sns.set_palette(custom_palette)
+
+plt.rc('font', size=12)          # controla o tamanho da fonte do texto
+plt.rc('axes', titlesize=12)     # tamanho da fonte do título do eixo
+plt.rc('axes', labelsize=12)     # tamanho da fonte dos rótulos do eixo
+plt.rc('xtick', labelsize=12)    # tamanho da fonte dos ticks do eixo x
+plt.rc('ytick', labelsize=12)    # tamanho da fonte dos ticks do eixo y
+plt.rc('legend', fontsize=12)    # tamanho da fonte da legenda
+plt.rc('figure', titlesize=12)   # tamanho da fonte do título da figura
+
 employees_df = pd.read_csv(filepath_or_buffer='./data/people_analytics_start.csv')
 
 employees_df['education'].replace([np.nan, "Associate's degree", "Bachelor's degree", "Master's degree"], [0, 1, 2, 3], inplace=True)
 
-bins = [20,25,30,35,40,45,50,55,60,65]
-labels = ['[20-24]','[25-29]','[30-34]','[35-39]','[40-44]','[45-49]','[50-54]','[55-59]','[60-64]']
+bins = [20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
+labels = ['[20-24]', '[25-29]', '[30-34]', '[35-39]', '[40-44]', '[45-49]', '[50-54]', '[55-59]', '[60-64]']
 employees_df['age_group'] = pd.cut(employees_df['age'], bins=bins, labels=labels, right=False)
 
 left_df = employees_df[employees_df['active_status'] == 0]
@@ -23,14 +37,15 @@ plot = sns.histplot(left_df['term_type'], shrink=0.8)
 # Annotate each bar with its value
 for p in plot.patches:
     plot.annotate(format(p.get_height(), '.0f'), 
-                     (p.get_x() + p.get_width() / 2., p.get_height() - 5), 
-                     ha = 'center', va = 'center', 
-                     xytext = (0, 9), 
-                     textcoords = 'offset points')
+                  (p.get_x() + p.get_width() / 2., p.get_height() - 5), 
+                  ha = 'center', va = 'center', 
+                  xytext = (0, 9), 
+                  textcoords = 'offset points')
 
 plot.set_xlabel('Tipo de desligamento do colaborador (term_type)')
 plot.set_ylabel('# Ocorrências')
 plot.set_xticklabels(['Voluntário', 'Involuntário'])
+
 plt.tight_layout()
 plt.savefig('./figures/analysis_term_type.png')
 plt.close()
@@ -43,17 +58,21 @@ plot = sns.histplot(left_df['term_reason'], shrink=0.8)
 # Annotate each bar with its value
 for p in plot.patches:
     plot.annotate(format(p.get_height(), '.0f'), 
-                     (p.get_x() + p.get_width() / 2., p.get_height() - 1), 
-                     ha = 'center', va = 'center', 
-                     xytext = (0, 9), 
-                     textcoords = 'offset points')
+                  (p.get_x() + p.get_width() / 2., p.get_height() - 1), 
+                  ha = 'center', va = 'center', 
+                  xytext = (0, 9), 
+                  textcoords = 'offset points')
+
+# xticks = ['Oportunidade melhor', 'Mudança de carreira', 'Desempenho', 'Salário melhor',
+#           'Benefícios mais flexíveis', 'Razões pessoais', 'Rescisão por justa causa', 'Realocação',
+#           'Reestruturação da empresa', 'Cortes de orçamento']
+xticks = ['OM', 'MC', 'D', 'SM', 'BMF', 'RP', 'RJC', 'R', 'RE', 'CO']
 
 plot.set_xlabel('Motivo do desligamento do colaborador (term_reason)')
 plot.set_ylabel('# Ocorrências')
-plot.set_xticklabels(['Oportunidade melhor', 'Mudança de carreira', 'Desempenho', 'Salário melhor',
-                      'Benefícios mais flexíveis', 'Razões pessoais', 'Rescisão por justa causa', 'Realocação',
-                      'Reestruturação da empresa', 'Cortes de orçamento'])
-plot.figure.set_size_inches(20, 8)
+plot.set_xticklabels(xticks)
+plot.figure.set_size_inches(12, 6)
+
 plt.tight_layout()
 plt.savefig('./figures/analysis_term_reason.png')
 plt.close()
@@ -88,7 +107,7 @@ ax = plt.gca()
 for p in ax.patches:
     if p._height > 0:
         ax.annotate(format(p.get_height(), '.3f'), (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', fontsize=10, color='black', xytext=(0, 5),
+                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),
                     textcoords='offset points')
 
 plt.tight_layout()
@@ -118,7 +137,7 @@ plt.close()
 
 
 # Gênero
-plt.figure(figsize=(25, 8))
+plt.figure(figsize=(12, 6))
 plt.yscale("log")
 x, y, hue = "gender", "proportion", "active_status"
 
@@ -146,7 +165,7 @@ ax = plt.gca()
 for p in ax.patches:
     if p._height > 0:
         ax.annotate(format(p.get_height(), '.5f'), (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', fontsize=10, color='black', xytext=(0, 5),
+                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),
                     textcoords='offset points')
 
 plt.tight_layout()
@@ -156,7 +175,7 @@ plt.close()
 
 
 # Grau de educação
-plt.figure(figsize=(25, 8))
+plt.figure(figsize=(12, 6))
 plt.yscale("log")
 x, y, hue = "education", "proportion", "active_status"
 
@@ -184,7 +203,7 @@ ax = plt.gca()
 for p in ax.patches:
     if p._height > 0:
         ax.annotate(format(p.get_height(), '.3f'), (p.get_x() + p.get_width() / 2., p.get_height()),
-                    ha='center', va='center', fontsize=10, color='black', xytext=(0, 5),
+                    ha='center', va='center', fontsize=12, color='black', xytext=(0, 5),
                     textcoords='offset points')
 
 plt.tight_layout()
